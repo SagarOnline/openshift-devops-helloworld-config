@@ -1,10 +1,8 @@
 try {
     timeout(time: 20, unit: 'MINUTES') {
-        agent {
-            stage('Initialise') {
-                echo 'Copying workspace files'
-                stash 'workspace'
-            }
+        stage('Initialise') {
+            echo 'Copying workspace files'
+            stash 'workspace'
         }
         
 
