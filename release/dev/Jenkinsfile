@@ -1,19 +1,21 @@
 try {
     timeout(time: 20, unit: 'MINUTES') {
         node('nodejs') {
-            stage('build') {
-            openshift.withCluster() {
-                openshift.withProject() {
-                    echo 'Building..'
-                }  
-            }
-            }
-            stage('deploy') {
-            openshift.withCluster() {
-                openshift.withProject() {
-                echo 'Deploying ..'
+            stage('Start') {
+                openshift.withCluster() {
+                    openshift.withProject() {
+                        echo 'Building..'
+                    }  
                 }
             }
+            stage('Create') {
+                openshift.withCluster() {
+                    openshift.withProject() {
+                        openshift.process("-f", "release/dev/rollout-template.yaml", 
+                                            "--param-file", "release/release.properties",
+                                            "--param-file", "application.properties")
+                    }
+                }
             }
         }
     }
