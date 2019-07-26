@@ -1,6 +1,6 @@
 try {
     timeout(time: 20, unit: 'MINUTES') {
-        node {
+        agent {
             stage('Initialise') {
                 echo 'Copying workspace files'
                 stash 'workspace'
