@@ -1,5 +1,8 @@
 try {
     timeout(time: 20, unit: 'MINUTES') {
+        
+        stash 'workspace'
+
         node('nodejs') {
             stage('Start') {
                 openshift.withCluster() {
@@ -11,6 +14,7 @@ try {
             stage('Create') {
                 openshift.withCluster() {
                     openshift.withProject() {
+                        unstash 'workspace'
                         /*openshift.process("-f", "release/dev/rollout-template.yaml", 
                                             "--param-file", "release/release.properties",
                                             "--param-file", "application.properties")
