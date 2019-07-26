@@ -1,7 +1,12 @@
 try {
     timeout(time: 20, unit: 'MINUTES') {
+        node {
+            stage('Initialise') {
+                echo 'Copying workspace files'
+                stash 'workspace'
+            }
+        }
         
-        stash 'workspace'
 
         node('nodejs') {
             stage('Start') {
