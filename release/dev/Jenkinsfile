@@ -19,10 +19,10 @@ try {
                 openshift.withCluster() {
                     openshift.withProject() {
                         unstash 'workspace'
-                        /*openshift.process("-f", "release/dev/rollout-template.yaml", 
+                        openshift.process("-f", "release/dev/rollout-template.yaml", 
                                             "--param-file", "release/release.properties",
                                             "--param-file", "application.properties")
-                                            */
+                                            
                         sh 'ls -lrst'
                     }
                 }
