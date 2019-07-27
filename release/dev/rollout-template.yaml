@@ -33,38 +33,37 @@ objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
-  labels:
-    app: ${APP_NAME}
-    release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
-    environment: ${DEV_ENV_NAME}
-  name: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}-dc
-spec:
-  replicas: 2
-  selector:
-    release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
-  template:
-    metadata:
-      labels:
-        release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
-    spec:
-      containers:
-        - image: DOCKER_REGISTRY/${APP_NAME}:${RELEASE_NAME}
-          imagePullPolicy: IfNotPresent
-          resources: {}
-          name: ${APP_NAME}
-      restartPolicy: Always
-      terminationGracePeriodSeconds: 30
-  triggers:
-    - type: ConfigChange
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-          - ${APP_NAME}
-        from:
-          kind: ImageStreamTag
-          name: '${APP_NAME}:${RELEASE_NAME}'
-      type: ImageChange
-      
+    labels:
+      app: ${APP_NAME}
+      release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
+      environment: ${DEV_ENV_NAME}
+    name: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}-dc
+  spec:
+    replicas: 2
+    selector:
+      release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
+    template:
+      metadata:
+        labels:
+          release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
+      spec:
+        containers:
+          - image: DOCKER_REGISTRY/${APP_NAME}:${RELEASE_NAME}
+            imagePullPolicy: IfNotPresent
+            resources: {}
+            name: ${APP_NAME}
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 30
+    triggers:
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${APP_NAME}
+          from:
+            kind: ImageStreamTag
+            name: '${APP_NAME}:${RELEASE_NAME}'
+        type: ImageChange
 - apiVersion: v1
   kind: Service
   metadata:
