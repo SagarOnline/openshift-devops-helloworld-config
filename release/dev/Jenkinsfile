@@ -1,25 +1,37 @@
-pipeline {
-    agent any
+try {
+    timeout(time: 20, unit: 'MINUTES') {
+        node{
+            stage('Initialise') {
+                echo 'Copying workspace files'
+                stash 'workspace'
+            }
+        }
 
-    stages {
-        stage('Build') {
-            node('nodejs'){
+        node('nodejs') {
+            stage('Start') {
                 openshift.withCluster() {
                     openshift.withProject() {
                         echo 'Building..'
                     }  
                 }
             }
-        }
-        stage('Test') {
-            steps {
-                echo 'Testing..'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying....'
+            stage('Create') {
+                openshift.withCluster() {
+                    openshift.withProject() {
+                        unstash 'workspace'
+                        /*openshift.process("-f", "release/dev/rollout-template.yaml", 
+                                            "--param-file", "release/release.properties",
+                                            "--param-file", "application.properties")
+                                            */
+                        sh 'ls -lrst'
+                    }
+                }
             }
         }
     }
-}
+} catch (err) {
+    echo "in catch block"
+    echo "Caught: ${err}"
+    currentBuild.result = 'FAILURE'
+    throw err
+}          
