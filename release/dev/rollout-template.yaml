@@ -52,7 +52,7 @@ objects:
           release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
       spec:
         containers:
-          - image: DOCKER_REGISTRY/${APP_NAME}:${RELEASE_NAME}
+          - image: ${DOCKER_REGISTRY}/${APP_NAME}:${RELEASE_NAME}
             imagePullPolicy: IfNotPresent
             resources: {}
             name: ${APP_NAME}
@@ -113,4 +113,4 @@ objects:
       - name: ${RELEASE_NAME}
         from:
           kind: DockerImage
-          name: DOCKER_REGISTRY/${APP_NAME}:${RELEASE_NAME}
+          name: ${DOCKER_REGISTRY}/${APP_NAME}:${RELEASE_NAME}
