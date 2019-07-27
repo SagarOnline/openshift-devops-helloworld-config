@@ -81,7 +81,7 @@ objects:
     ports:
       - port: 80
         protocol: TCP
-        targetPort: ${CONTAINER_PORT}
+        targetPort: ${{CONTAINER_PORT}}
     selector:
       release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
     sessionAffinity: None
