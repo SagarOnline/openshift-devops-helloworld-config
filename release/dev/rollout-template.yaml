@@ -29,6 +29,10 @@ parameters:
   displayName: External docker image registry
   name: DOCKER_REGISTRY
   required: true
+- description: Port on which application should start. 
+  displayName: application port
+  name: CONTAINER_PORT
+  required: true
 objects:
 - apiVersion: v1
   kind: DeploymentConfig
