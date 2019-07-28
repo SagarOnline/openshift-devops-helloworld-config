@@ -4,7 +4,7 @@ try {
             stage('Initialize') {
                 echo 'Copying workspace files ...'
                 echo "Parameters : ${GIT_REPO}"
-                git(url:'https://github.com/SagarOnline/openshift-devops-helloworld-config.git'
+                git(url:"'${GIT_REPO}'"
                         , branch:'master')
                 stash 'workspace'
             }
@@ -20,12 +20,17 @@ try {
             stage('Create') {
                 openshift.withCluster() {
                     openshift.withProject() {
-                        sh 'ls -lrst'
                         unstash 'workspace'
-                        openshift.create( openshift.process("-f", "release/dev/rollout-template.yaml", 
-                                            "--param-file", "release/release.properties",
-                                            "--param-file", "application.properties",
-                                            "--ignore-unknown-parameters", "true"
+                        sh 'ls -lrst'
+                        //openshift.create( openshift.process("-f", "release/dev/rollout-template.yaml", 
+                        //                    "--param-file", "release/release.properties",
+                        //                   "--param-file", "application.properties",
+                        //                    "--ignore-unknown-parameters", "true"
+                        //                    ))
+                        openshift.create( openshift.process("-f=release/dev/rollout-template.yaml", 
+                                            "--param-file=release/release.properties",
+                                            "--param-file=application.properties",
+                                            "--ignore-unknown-parameters=true"
                                             ))
                                             
                         
