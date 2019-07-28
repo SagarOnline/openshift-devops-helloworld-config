@@ -1,32 +1,19 @@
 try {
     timeout(time: 20, unit: 'MINUTES') {
-        node('master') {
-            stage('Initialize') {
-                echo 'Copying workspace files ...'
-                echo "Parameters : ${GIT_REPO}"
+        
+        node('nodejs') {
+            stage('Checkout') {
+                echo 'Checkout DevOps Repo'
                 git(url:"${GIT_REPO}"
                         , branch:'master')
-                stash 'workspace'
+                //stash 'workspace'
             }
-        }
-        node('nodejs') {
-            stage('Start') {
+            stage('Rollout') {
                 openshift.withCluster() {
                     openshift.withProject() {
-                        echo 'Building..'
-                    }  
-                }
-            }
-            stage('Create') {
-                openshift.withCluster() {
-                    openshift.withProject() {
-                        unstash 'workspace'
+                        echo 'Creating Rollout Resources in Dev environment'
+                        //unstash 'workspace'
                         sh 'ls -lrst'
-                        //openshift.create( openshift.process("-f", "release/dev/rollout-template.yaml", 
-                        //                    "--param-file", "release/release.properties",
-                        //                   "--param-file", "application.properties",
-                        //                    "--ignore-unknown-parameters", "true"
-                        //                    ))
                         openshift.create( openshift.process("-f=release/dev/rollout-template.yaml", 
                                             "--param-file=release/release.properties",
                                             "--param-file=application.properties",
