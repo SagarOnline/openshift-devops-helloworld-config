@@ -3,6 +3,7 @@ try {
         node('master') {
             stage('Initialize') {
                 echo 'Copying workspace files ...'
+                git clone ${GIT_REPO}
                 stash 'workspace'
             }
         }
