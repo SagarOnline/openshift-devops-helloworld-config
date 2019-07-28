@@ -3,7 +3,7 @@ try {
         node('master') {
             stage('Initialize') {
                 echo 'Copying workspace files ...'
-                echo 'Parameters : ${params.GIT_REPO}'
+                echo 'Parameters : ${GIT_REPO}'
                 stash 'workspace'
             }
         }
