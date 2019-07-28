@@ -6,7 +6,7 @@ try {
                 echo "Parameters : ${GIT_REPO}"
                 git(url:'https://github.com/SagarOnline/openshift-devops-helloworld-config.git'
                         , branch:'master')
-                //stash 'workspace'
+                stash 'workspace'
             }
         }
         node('nodejs') {
@@ -21,12 +21,11 @@ try {
                 openshift.withCluster() {
                     openshift.withProject() {
                         sh 'ls -lrst'
-                        //unstash 'workspace'
+                        unstash 'workspace'
                         openshift.create( openshift.process("-f", "release/dev/rollout-template.yaml", 
                                             "--param-file", "release/release.properties",
                                             "--param-file", "application.properties",
-                                            "--ignore-unknown-parameters", "true",
-                                            "|",
+                                            "--ignore-unknown-parameters", "true"
                                             ))
                                             
                         
