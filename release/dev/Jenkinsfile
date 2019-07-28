@@ -1,13 +1,8 @@
 try {
     timeout(time: 20, unit: 'MINUTES') {
-        def extWorkspace = exwsAllocate diskPoolId: 'diskpool1'
-        node{
-            stage('Initialize') {
-                exws (extWorkspace) {
-                    echo 'Copying workspace files'
-                    stash 'workspace'
-                }
-            }
+        stage('Initialize') {
+            echo 'Copying workspace files'
+            stash 'workspace'
         }
 
         node('nodejs') {
