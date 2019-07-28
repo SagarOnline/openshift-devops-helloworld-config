@@ -4,7 +4,8 @@ try {
             stage('Initialize') {
                 echo 'Copying workspace files ...'
                 echo "Parameters : ${GIT_REPO}"
-                git clone "${GIT_REPO}"
+                checkout(url:'https://github.com/SagarOnline/openshift-devops-helloworld-config.git'
+                        , branch:'master')
                 stash 'workspace'
             }
         }
