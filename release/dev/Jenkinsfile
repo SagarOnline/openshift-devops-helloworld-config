@@ -1,10 +1,12 @@
 try {
     timeout(time: 20, unit: 'MINUTES') {
+        def extWorkspace = exwsAllocate diskPoolId: 'diskpool1'
         node{
             stage('Initialize') {
-                scm checkout
-                echo 'Copying workspace files'
-                stash 'workspace'
+                exws (extWorkspace) {
+                    echo 'Copying workspace files'
+                    stash 'workspace'
+                }
             }
         }
 
@@ -17,17 +19,19 @@ try {
                 }
             }
             stage('Create') {
-                openshift.withCluster() {
-                    openshift.withProject() {
-                        unstash 'workspace'
-                        openshift.create( openshift.process("-f", "release/dev/rollout-template.yaml", 
-                                            "--param-file", "release/release.properties",
-                                            "--param-file", "application.properties",
-                                            "--ignore-unknown-parameters", "true",
-                                            "|",
-                                            ))
-                                            
-                        sh 'ls -lrst'
+                exws (extWorkspace) {
+                    openshift.withCluster() {
+                        openshift.withProject() {
+                            unstash 'workspace'
+                            openshift.create( openshift.process("-f", "release/dev/rollout-template.yaml", 
+                                                "--param-file", "release/release.properties",
+                                                "--param-file", "application.properties",
+                                                "--ignore-unknown-parameters", "true",
+                                                "|",
+                                                ))
+                                                
+                            sh 'ls -lrst'
+                        }
                     }
                 }
             }
