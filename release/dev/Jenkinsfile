@@ -1,10 +1,11 @@
 try {
     timeout(time: 20, unit: 'MINUTES') {
-        stage('Initialize') {
-            echo 'Copying workspace files ...'
-            stash 'workspace'
+        node('master') {
+            stage('Initialize') {
+                echo 'Copying workspace files ...'
+                stash 'workspace'
+            }
         }
-
         node('nodejs') {
             stage('Start') {
                 openshift.withCluster() {
