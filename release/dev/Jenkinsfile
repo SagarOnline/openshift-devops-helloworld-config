@@ -7,8 +7,6 @@ try {
                 git(url:"${GIT_REPO}"
                         , branch:'master')
                 //stash 'workspace'
-                sh 'npm version'
-                sh 'mvn -v'
             }
             stage('Rollout') {
                 openshift.withCluster() {
