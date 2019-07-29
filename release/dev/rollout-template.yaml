@@ -39,17 +39,17 @@ objects:
   metadata:
     labels:
       app: ${APP_NAME}
-      release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
-      environment: ${DEV_ENV_NAME}
+      release: ${DEV_ENV_NAME}-${RELEASE_NAME}
+      environment: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
     name: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}-dc
   spec:
     replicas: 2
     selector:
-      release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
+      environment: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
     template:
       metadata:
         labels:
-          release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
+          environment: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
       spec:
         containers:
           - image: ${DOCKER_REGISTRY}/${APP_NAME}:${RELEASE_NAME}
@@ -71,11 +71,10 @@ objects:
 - apiVersion: v1
   kind: Service
   metadata:
-    creationTimestamp: '2019-07-22T04:33:00Z'
     labels:
       app: ${APP_NAME}
-      release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
-      environment: ${DEV_ENV_NAME}
+      release: ${DEV_ENV_NAME}-${RELEASE_NAME}
+      environment: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
     name: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}-svc
   spec:
     ports:
@@ -83,7 +82,7 @@ objects:
         protocol: TCP
         targetPort: ${{CONTAINER_PORT}}
     selector:
-      release: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
+      environment: ${APP_NAME}-${RELEASE_NAME}-${DEV_ENV_NAME}
     sessionAffinity: None
     type: ClusterIP
 - apiVersion: v1
