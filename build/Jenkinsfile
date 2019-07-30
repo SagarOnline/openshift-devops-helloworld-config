@@ -3,16 +3,17 @@ try {
         
         node('nodejs') {
             stage('Checkout') {
-                echo 'Checkout Application Config Repo'
-                git(url:"${APP_CONFIG_GIT_REPO}"
+                echo 'Checkout Application Code'
+                git(url:"${APP_SOURCE_GIT_REPO}"
                         , branch:'master')
-                //stash 'workspace'
+                sh 'cd angularclient && npm install && npm run build'
+                stash name: 'workspace', excludes: 'angularclient/**'
             }
-            stage('Rollout') {
+            /*stage('Build') {
                 openshift.withCluster() {
                     openshift.withProject() {
                         echo 'Creating Rollout Resources in Dev environment'
-                        //unstash 'workspace'
+                        unstash 'workspace'
                         sh 'ls -lrst'
                         openshift.create( openshift.process("-f=release/dev/rollout-template.yaml", 
                                             "--param-file=release/release.properties",
@@ -23,6 +24,16 @@ try {
                         
                     }
                 }
+            }
+            */
+        }
+
+        node('maven') {
+            stage('Build') {
+                unstash 'workspace'
+                sh 'ls -lrst'
+                echo 'Packaging maven application'
+                sh 'mvn package'
             }
         }
     }
