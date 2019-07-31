@@ -26,14 +26,39 @@ try {
                 }
             }
             */
+            
         }
 
         node('maven') {
-            stage('Build') {
+            stage('Maven Build') {
                 unstash 'workspace'
                 sh 'ls -lrst'
                 echo 'Packaging maven application'
                 sh 'mvn package'
+            }
+
+            stage('Docker Build') {
+                openshift.withCluster() {
+                    openshift.withProject() {
+                        echo 'Building docker image'
+                        //unstash 'workspace'
+                        sh 'ls -lrst'
+                        def buildConfig = openshift.selector("bc", "${APP_NAME}").build().object
+                        if(buildConfig == null){
+                            openshift.create( openshift.process("-f=release/build/build-template.yaml", 
+                                                "--param-file=release/release.properties",
+                                                "--param-file=application.properties",
+                                                "--ignore-unknown-parameters=true"
+                                                ))
+                        }
+                        sh 'tar -cvf context.tar target/"${APP_NAME}".jar Dockerfile'
+                        sh 'oc start-build "${APP_NAME}"-"${RELEASE_NAME}"-build --from-archive=context.tar'
+                        //buildConfig = openshift.selector("bc", "${APP_NAME}").object()
+                        //buildConfig.startBuild()
+                                           
+                        
+                    }
+                }
             }
         }
     }
