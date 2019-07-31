@@ -43,7 +43,7 @@ try {
                         echo 'Building docker image'
                         //unstash 'workspace'
                         sh 'ls -lrst'
-                        def buildConfig = openshift.selector("bc", "${APP_NAME}").build().object
+                        def buildConfig = openshift.selector("bc", "${APP_NAME}").build().object()
                         if(buildConfig == null){
                             openshift.create( openshift.process("-f=build/build-template.yaml", 
                                                 "--param-file=release/release.properties",
