@@ -44,7 +44,7 @@ try {
                         //unstash 'workspace'
                         sh 'ls -lrst'
                         def buildConfig = openshift.selector("bc", '"${APP_NAME}"')
-                        if(buildConfig.exists()){
+                        if(!buildConfig.exists()){
                             openshift.create( openshift.process("-f=build/build-template.yaml", 
                                                 "--param-file=release/release.properties",
                                                 "--param-file=application.properties",
