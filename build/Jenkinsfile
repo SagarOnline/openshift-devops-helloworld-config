@@ -8,6 +8,7 @@ try {
                         , branch:'master')
                 git(url:"${APP_CONFIG_GIT_REPO}"
                         , branch:'master')
+                sh 'ls -lrst'
                 sh 'cd angularclient && npm install && npm run build'
                 stash name: 'workspace', excludes: 'angularclient/**'
             }
