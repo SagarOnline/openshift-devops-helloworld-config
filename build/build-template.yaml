@@ -22,6 +22,11 @@ parameters:
   displayName: Release Name
   name: RELEASE_NAME
   required: true
+- description: Constant to use for Dev Environment 
+  displayName: Dev environment name
+  name: DEV_ENV_NAME
+  required: true
+  value: dev
 objects:
 
 # BuildConfig definition to build docker image and push to ImageStream
@@ -31,7 +36,7 @@ objects:
     name: "${APP_NAME}-${RELEASE_NAME}-build"
     labels:
       app: ${APP_NAME}
-      release: ${DEV_ENV_NAME}-${RELEASE_NAME}
+      release: ${APP_NAME}-${DEV_ENV_NAME}-${RELEASE_NAME}
   spec:
     runPolicy: "Serial"
     source:
