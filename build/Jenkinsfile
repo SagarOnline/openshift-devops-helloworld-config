@@ -6,6 +6,8 @@ try {
                 echo 'Checkout Application Code'
                 git(url:"${APP_SOURCE_GIT_REPO}"
                         , branch:'master')
+                git(url:"${APP_CONFIG_GIT_REPO}"
+                        , branch:'master')
                 sh 'cd angularclient && npm install && npm run build'
                 stash name: 'workspace', excludes: 'angularclient/**'
             }
