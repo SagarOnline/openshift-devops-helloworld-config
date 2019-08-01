@@ -52,6 +52,10 @@ objects:
       to:
         kind: "ImageStreamTag"
         name: "${APP_NAME}:${RELEASE_NAME}"
+    triggers:
+      - github:
+        secret: app_source_secret
+      type: GitHub
 
  # ImageStream to be used by DeploymentConfig to rollout application       
 - apiVersion: v1
