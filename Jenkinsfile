@@ -7,6 +7,7 @@ pipeline {
             agent{
                 docker{
                     image 'openshift/origin-cli'
+                    label 'docker-agent'
                 }
             }
             steps {
