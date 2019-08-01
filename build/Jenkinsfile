@@ -56,13 +56,9 @@ try {
                             sh 'oc create secret generic "${APP_SOURCE_GIT_REPO_SECRET_NAME}" --from-literal WebHookSecretKey=HelloworldSourceGitRepoSecret'
                             
                         }
+                        
                         def buildConfig = openshift.selector("bc", '"${APP_NAME}"')
                         if(!buildConfig.exists()){
-                            // Create a secret for GitHub webhook. This secret is referred by BuildConfig to trigger the build on new commit.
-
-                            //TODO : For demo purpose secret is hardcoded here, 
-                            //       but in real project it should be parameterized to Jenkins pipeline
-                            sh 'oc create secret generic "${APP_SOURCE_GIT_REPO_SECRET_NAME}" --from-literal WebHookSecretKey=HelloworldSourceGitRepoSecret'
                             
                             openshift.create( openshift.process("-f=build/build-template.yaml", 
                                                 "--param-file=release/release.properties",
