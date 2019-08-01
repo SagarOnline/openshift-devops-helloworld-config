@@ -50,7 +50,7 @@ try {
                             sh 'ls -lrst'
 
                             echo 'Creating a dockerStrategy BuildConfig ...'
-                            openshift.create( openshift.process("-f=build/build-template.yaml", 
+                            openshift.apply( openshift.process("-f=build/build-template.yaml", 
                                                 "--param-file=release/release.properties",
                                                 "--param-file=application.properties",
                                                 "--ignore-unknown-parameters=true"
@@ -59,7 +59,7 @@ try {
                         
                         echo 'Starting a dockerStrategy Build ...'
                         unstash 'workspace'
-                        
+
                         sh 'tar -cvf context.tar target/"${APP_NAME}".jar Dockerfile'
                         sh 'oc start-build "${APP_NAME}"-"${RELEASE_NAME}"-build --from-archive=context.tar'
                         //buildConfig = openshift.selector("bc", "${APP_NAME}").object()
