@@ -12,7 +12,7 @@ pipeline {
             }
             steps {
                 echo 'Building..'
-                 sh 'oc explain -h'
+                 sh 'oc login https://2886795352-8443-cykoria05.environments.katacoda.com:443 -u admin -p admin --insecure-skip-tls-verify'
             }
         }
         stage('Test') {
