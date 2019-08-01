@@ -12,7 +12,7 @@ pipeline {
             }
             steps {
                 echo 'Building..'
-                 echo 'oc explain -h'
+                 sh 'oc explain -h'
             }
         }
         stage('Test') {
