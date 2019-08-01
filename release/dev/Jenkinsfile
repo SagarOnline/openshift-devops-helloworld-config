@@ -18,7 +18,7 @@ try {
                         if(!deploymentConfig.exists()){
                             echo 'Creating Application Rollout Resources in Dev environment'
 
-                            openshift.create( openshift.process("-f=release/dev/rollout-template.yaml", 
+                            openshift.apply( openshift.process("-f=release/dev/rollout-template.yaml", 
                                                 "--param-file=release/release.properties",
                                                 "--param-file=application.properties",
                                                 "--ignore-unknown-parameters=true"

@@ -59,7 +59,8 @@ try {
                         
                         echo 'Starting a dockerStrategy Build ...'
                         unstash 'workspace'
-
+                        sh 'ls -lrst'
+                        
                         sh 'tar -cvf context.tar target/"${APP_NAME}".jar Dockerfile'
                         sh 'oc start-build "${APP_NAME}"-"${RELEASE_NAME}"-build --from-archive=context.tar'
                         //buildConfig = openshift.selector("bc", "${APP_NAME}").object()
