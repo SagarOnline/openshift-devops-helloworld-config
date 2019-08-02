@@ -3,7 +3,7 @@ try {
         
         node('nodejs') {
             stage('Checkout Application Source Code') {
-
+                sh 'ls -lrst'
                 git(url:"${APP_SOURCE_GIT_REPO}"
                         , branch:'master')
             }
