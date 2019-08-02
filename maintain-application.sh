@@ -12,7 +12,7 @@ oc new-app jenkins-ephemeral
 #git clone https://github.com/SagarOnline/openshift-devops-helloworld-config.git helloworld-config
 
 
-oc new-app -f dev/application-template.yaml
+oc new-app -f dev/application-template.yaml --param-file application.properties --ignore-unknown-parameters=true
 # Process Release Management Template to create a release for helloworld v1. This will create a "helloworld-v1-dev-rollout" pipeline in cluster to deploy a helloworld application in cluster.
 #oc process release-management-template --param-file=helloworld-config/release/release.properties --ignore-unknown-parameters=true | oc create -f -
 
