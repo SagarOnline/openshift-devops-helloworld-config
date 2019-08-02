@@ -153,6 +153,19 @@ objects:
     sessionAffinity: None
     type: ClusterIP
 
+- apiVersion: v1
+  kind: Route
+  metadata:
+    labels:
+      app: ${APP_NAME}
+      environment: ${APP_NAME}-dev
+    name: ${APP_NAME}-route
+  spec:
+    to:
+      kind: Service
+      name: ${APP_NAME}-svc
+      weight: 100
+    wildcardPolicy: None
  # ImageStream to be used by DeploymentConfig to rollout application       
 - apiVersion: v1
   kind: ImageStream
