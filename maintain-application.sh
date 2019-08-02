@@ -9,7 +9,7 @@ oc new-app jenkins-ephemeral
 
 
 # Checkout helloworld-config project
-git clone https://github.com/SagarOnline/openshift-devops-helloworld-config.git helloworld-config
+#git clone https://github.com/SagarOnline/openshift-devops-helloworld-config.git helloworld-config
 
 
 oc new-app -f dev/application-template.yaml
