@@ -36,7 +36,7 @@ pipeline {
             steps {
                 script {
                     def props = readProperties  file: 'release/release.properties'
-                    
+                    assert props['APP_NAME'] == 'helloworld'
                 }
 
                 echo props
