@@ -34,7 +34,7 @@ pipeline {
             agent any
 
             steps {
-                def props = readProperties  file: 'dir/my.properties'
+                def props = readProperties  file: 'release/release.properties'
                 echo props
                 
             }
