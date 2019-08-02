@@ -7,7 +7,7 @@ message: |-
   the Pipeline BuildConfig created by this template.  
 metadata:
   annotations:
-    openshift.io/display-name: Release Management Template
+    openshift.io/display-name: Helloworld application
     description: |-
       This template defines a release for application, processing a template will  
       1. create a Rollout pipeline for Dev environment of specified application and version. 
@@ -15,7 +15,7 @@ metadata:
       2. TODOs : update description as more features are added into this template.
     iconClass: icon-jenkins
     tags: instant-app,jenkins
-  name: release-management-setup-template
+  name: helloworld
 parameters:
 - description: The name of the application to which this template belongs. It should not have any whitespaces. for e.g. marketdata, accounts, etc.
   displayName: Application Name
@@ -25,11 +25,6 @@ parameters:
   displayName: Release Name
   name: RELEASE_NAME
   required: true
-- description: Constant to use for Dev Environment 
-  displayName: Dev environment name
-  name: DEV_ENV_NAME
-  required: true
-  value: dev
 - description: Git repository url of the application configuration where all DevOps configuration are maintained such as Jenkinsfiles, parameters, etc.
   displayName: Git repository URL of Application Config
   name: APP_CONFIG_GIT_REPO
@@ -37,10 +32,6 @@ parameters:
 - description: Git repository url of the application source code 
   displayName: Git repository URL of Application source code
   name: APP_SOURCE_GIT_REPO
-  required: true
-- description: Path of Jenkinsfile for Rollout pipeline.  It should be relative to the context directory specified by 'APP_CONFIG_GIT_REPO' param.. 
-  displayName: Path of Rollout pipeline jenkinsfile
-  name: DEV_ROLLOUT_JENKINSFILE_PATH
   required: true
 - description: Path of Jenkinsfile to build application code. It should be relative to the context directory specified by 'APP_CONFIG_GIT_REPO' param.
   displayName: Path of Jenkinsfile to build application code
@@ -50,7 +41,11 @@ parameters:
   displayName: Secret name used by build pipeline Github trigger
   name: APP_SOURCE_GIT_REPO_SECRET_NAME
   required: true
-  
+ - description: Port on which application should start. 
+  displayName: application port
+  name: CONTAINER_PORT
+  required: true
+   
 objects:
 
 
@@ -60,7 +55,7 @@ objects:
   metadata:
     labels:
       app: ${APP_NAME}
-      release: ${DEV_ENV_NAME}-${RELEASE_NAME}
+      environment: ${APP_NAME}-dev
     name: ${APP_NAME}-build
   spec:
     source:
@@ -83,3 +78,85 @@ objects:
     - github:
         secret: ${APP_SOURCE_GIT_REPO_SECRET_NAME}
       type: GitHub
+
+# BuildConfig definition to build docker image and push to ImageStream
+- apiVersion: v1
+  kind: "BuildConfig"
+  metadata:
+    name: "${APP_NAME}-${RELEASE_NAME}-build"
+    labels:
+      app: ${APP_NAME}
+      environment: ${APP_NAME}-dev
+  spec:
+    runPolicy: "Serial"
+    source:
+      type: "Binary"
+    strategy:
+      type: "Docker"
+      dockerStrategy:
+        dockerfilePath: Dockerfile
+        env:
+          - name: "BUILD_LOGLEVEL"
+            value: "5"
+    output:
+      to:
+        kind: "ImageStreamTag"
+        name: "${APP_NAME}:${RELEASE_NAME}"
+
+- apiVersion: v1
+  kind: DeploymentConfig
+  metadata:
+    labels:
+      app: ${APP_NAME}
+      environment: ${APP_NAME}-dev
+    name: ${APP_NAME}-dc
+  spec:
+    replicas: 2
+    selector:
+      environment: ${APP_NAME}-dev
+    template:
+      metadata:
+        labels:
+          environment: ${APP_NAME}-dev
+      spec:
+        containers:
+          - image: ${APP_NAME}:${RELEASE_NAME}-dev
+            imagePullPolicy: IfNotPresent
+            resources: {}
+            name: ${APP_NAME}
+        restartPolicy: Always
+        terminationGracePeriodSeconds: 30
+    triggers:
+      - type: ConfigChange
+      - imageChangeParams:
+          automatic: true
+          containerNames:
+            - ${APP_NAME}
+          from:
+            kind: ImageStreamTag
+            name: '${APP_NAME}:${RELEASE_NAME}-dev'
+        type: ImageChange
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: ${APP_NAME}
+      environment: ${APP_NAME}-dev
+    name: ${APP_NAME}-svc
+  spec:
+    ports:
+      - port: 80
+        protocol: TCP
+        targetPort: ${{CONTAINER_PORT}}
+    selector:
+      environment: ${APP_NAME}-dev
+    sessionAffinity: None
+    type: ClusterIP
+
+ # ImageStream to be used by DeploymentConfig to rollout application       
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      app: ${APP_NAME}
+    name: ${APP_NAME}
