@@ -101,7 +101,7 @@ objects:
     output:
       to:
         kind: "ImageStreamTag"
-        name: "${APP_NAME}:${RELEASE_NAME}"
+        name: "${APP_NAME}:${RELEASE_NAME}-dev"
 
 - apiVersion: v1
   kind: DeploymentConfig
