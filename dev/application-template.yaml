@@ -41,11 +41,11 @@ parameters:
   displayName: Secret name used by build pipeline Github trigger
   name: APP_SOURCE_GIT_REPO_SECRET_NAME
   required: true
- - description: Port on which application should start. 
+- description: Port on which application should start. 
   displayName: application port
   name: CONTAINER_PORT
   required: true
-   
+
 objects:
 
 
