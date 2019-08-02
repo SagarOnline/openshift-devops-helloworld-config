@@ -3,7 +3,7 @@ pipeline {
 
     stages {
         
-        stage('Build') {
+        stage('Setup Release') {
             agent{
                 docker{
                     image 'openshift/origin-cli'
@@ -13,7 +13,7 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh 'ls -lrst'
-                sh 'oc login https://2886795352-8443-cykoria05.environments.katacoda.com:443 -u admin -p admin --insecure-skip-tls-verify'
+                sh 'oc login https://2886795273-8443-cykoria05.environments-katacoda.com:443:443 -u admin -p admin --insecure-skip-tls-verify'
                 sh 'oc new-project helloworld-v1'
                 sh 'oc new-app jenkins-ephemeral'
                 sh 'oc apply -f https://raw.githubusercontent.com/SagarOnline/openshift-devops-simple-global-config/master/release/release-management-template.yaml'
