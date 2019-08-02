@@ -32,15 +32,10 @@ pipeline {
 
         stage('Setup Release') {
             agent any
-            
+
             steps {
-                echo 'Reading properties '
-                Properties properties = new Properties()
-                File propertiesFile = new File('release/release.properties')
-                propertiesFile.withInputStream {
-                    properties.load(it)
-                }
-                System.out.println(properties.getProperty("APP_NAME"))
+                def props = readProperties  file: 'dir/my.properties'
+                echo props
                 
             }
         }
