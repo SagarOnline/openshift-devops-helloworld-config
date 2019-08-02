@@ -64,7 +64,7 @@ try {
                         sh 'ls -lrst'
                         
                         sh 'tar -cvf context.tar target/"${APP_NAME}".jar Dockerfile'
-                        sh 'oc start-build "${APP_NAME}"-build --from-archive=context.tar'
+                        sh 'oc start-build "${APP_NAME}"-docker-image-build --from-archive=context.tar'
                         //buildConfig = openshift.selector("bc", "${APP_NAME}").object()
                         //buildConfig.startBuild()
                                            
