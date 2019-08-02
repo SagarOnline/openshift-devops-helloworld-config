@@ -37,7 +37,7 @@ pipeline {
                 script {
                     def props = readProperties  file: 'release/release.properties'
                     assert props['APP_NAME'] == 'helloworld'
-                    sh 'mkdir $props.APP_NAME'
+                    sh "mkdir $props.APP_NAME"
                     sh 'ls -lrst'
                 }
 
