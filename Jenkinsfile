@@ -36,8 +36,10 @@ pipeline {
             steps {
                 script {
                     def props = readProperties  file: 'release/release.properties'
-                    echo props
+                    
                 }
+
+                echo props
                 
             }
         }
