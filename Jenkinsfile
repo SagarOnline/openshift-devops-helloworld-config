@@ -21,7 +21,7 @@ pipeline {
                     //TODO : Credentials are currently hardcoded for Demo, these should be parameterized
                     sh "oc login $props.OPENSHIFT_CLUSTER_URL -u developer -p developer  --insecure-skip-tls-verify"
 
-                    //Create Project for Application Release
+                    //Create Project for Application Release in Dev environment
                     sh "oc new-project $props.APP_NAME-$props.RELEASE_NAME"
 
                     // Run Jenkins pod to run OpenShift pipelines
