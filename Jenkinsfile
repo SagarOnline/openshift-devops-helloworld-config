@@ -13,22 +13,23 @@ pipeline {
                 script{
                     sh 'ls -lrst'
 
-                    def props = readProperties  file: 'release/release.properties'
+                    def props = readProperties  file: 'application.properties'
 
-                    echo "Setting up release management pipelines for $props.APP_NAME-$props.RELEASE_NAME "
+                    echo "Setting up release management pipelines for $props.APP_NAME-dev "
 
                     // Login to OpenShift Cluster
                     //TODO : Credentials are currently hardcoded for Demo, these should be parameterized
                     sh "oc login $props.OPENSHIFT_CLUSTER_URL -u developer -p developer  --insecure-skip-tls-verify"
 
-                    //Create Project for Application Release in Dev environment
-                    sh "oc new-project $props.APP_NAME-$props.RELEASE_NAME"
+                    //Create Project for Application in Dev environment
+                    sh "oc new-project $props.APP_NAME-dev"
 
                     // Run Jenkins pod to run OpenShift pipelines
                     sh 'oc new-app jenkins-ephemeral'
                     
-                    // Create Release Management Piplelines for project
-                    sh 'oc process -f release/release-management-setup-template.yaml --param-file=release/release.properties --ignore-unknown-parameters=true | oc create -f -'
+                    // Setup Application Dev Environment
+                    
+                    sh 'oc process -f dev/application-template.yaml --param-file application.properties --ignore-unknown-parameters=true | oc apply -f -'
                 }
             }
         }
