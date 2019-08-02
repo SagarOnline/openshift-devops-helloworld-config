@@ -10,26 +10,26 @@ pipeline {
                 }
             }
             steps {
-                
-                sh 'ls -lrst'
+                script{
+                    sh 'ls -lrst'
 
-                def props = readProperties  file: 'release/release.properties'
+                    def props = readProperties  file: 'release/release.properties'
 
-                echo "Setting up release management pipelines for $props.APP_NAME-$props.RELEASE_NAME "
+                    echo "Setting up release management pipelines for $props.APP_NAME-$props.RELEASE_NAME "
 
-                // Login to OpenShift Cluster
-                //TODO : Credentials are currently hardcoded for Demo, these should be parameterized
-                sh "oc login $props.OPENSHIFT_CLUSTER_URL -u developer -p developer  --insecure-skip-tls-verify"
+                    // Login to OpenShift Cluster
+                    //TODO : Credentials are currently hardcoded for Demo, these should be parameterized
+                    sh "oc login $props.OPENSHIFT_CLUSTER_URL -u developer -p developer  --insecure-skip-tls-verify"
 
-                //Create Project for Application Release
-                sh "oc new-project $props.APP_NAME-$props.RELEASE_NAME"
+                    //Create Project for Application Release
+                    sh "oc new-project $props.APP_NAME-$props.RELEASE_NAME"
 
-                // Run Jenkins pod to run OpenShift pipelines
-                sh 'oc new-app jenkins-ephemeral'
-                
-                // Create Release Management Piplelines for project
-                sh 'oc process -f release/release-management-setup-template.yaml --param-file=release/release.properties --ignore-unknown-parameters=true | oc create -f -'
-                
+                    // Run Jenkins pod to run OpenShift pipelines
+                    sh 'oc new-app jenkins-ephemeral'
+                    
+                    // Create Release Management Piplelines for project
+                    sh 'oc process -f release/release-management-setup-template.yaml --param-file=release/release.properties --ignore-unknown-parameters=true | oc create -f -'
+                }
             }
         }
 
