@@ -2,7 +2,8 @@ pipeline {
     agent none
 
     stages {
-        stage('Setup Release') {
+
+        stage('Update Application Resources') {
             agent{
                 docker{
                     image 'openshift/origin-cli'
@@ -14,43 +15,31 @@ pipeline {
                     sh 'ls -lrst'
 
                     def props = readProperties  file: 'application.properties'
-
-                    echo "Setting up release management pipelines for $props.APP_NAME-dev "
+                    
 
                     // Login to OpenShift Cluster
                     //TODO : Credentials are currently hardcoded for Demo, these should be parameterized
                     sh "oc login $props.OPENSHIFT_CLUSTER_URL -u developer -p developer  --insecure-skip-tls-verify"
 
-                    //Create Project for Application in Dev environment
-                    sh "oc new-project $props.APP_NAME-dev"
+                    def projectName = $props.APP_NAME-${RELEASE_NAME}-dev
+                    echo "Setting up release management pipelines for $projectName "
+                    sh "oc get project > projects.txt"
+                    if (!readFile("projects.txt").contains($projectName)){
+                        //Create Project for Application in Dev environment
+                        sh "oc new-project $props.APP_NAME-${RELEASE_NAME}-dev"
+                    }
 
-                    // Run Jenkins pod to run OpenShift pipelines
-                    sh 'oc new-app jenkins-ephemeral'
-                    
+                    sh "oc get dc > deployments.txt"
+                    if (!readFile("deployments.txt").contains("jenkins")){
+                        // Run Jenkins pod to run OpenShift pipelines
+                        sh 'oc new-app jenkins-ephemeral'
+                    }
+
                     // Setup Application Dev Environment
                     
                     sh 'oc process -f dev/application-template.yaml --param-file application.properties --ignore-unknown-parameters=true | oc apply -f -'
                 }
             }
         }
-
-        /*
-        stage('Setup Release') {
-            agent any
-
-            steps {
-                script {
-                    def props = readProperties  file: 'release/release.properties'
-                    assert props['APP_NAME'] == 'helloworld'
-                    sh "mkdir $props.APP_NAME"
-                    sh 'ls -lrst'
-                }
-
-                
-            }
-        }
-        */
     }
-
-    
 }

@@ -55,7 +55,8 @@ objects:
   metadata:
     labels:
       app: ${APP_NAME}
-      environment: ${APP_NAME}-dev
+      release: ${RELEASE_NAME}
+      environment: dev
     name: ${APP_NAME}-build
   spec:
     source:
@@ -86,7 +87,8 @@ objects:
     name: "${APP_NAME}-docker-image-build"
     labels:
       app: ${APP_NAME}
-      environment: ${APP_NAME}-dev
+      release: ${RELEASE_NAME}
+      environment: dev
   spec:
     runPolicy: "Serial"
     source:
@@ -107,17 +109,22 @@ objects:
   kind: DeploymentConfig
   metadata:
     labels:
-      app: ${APP_NAME}
-      environment: ${APP_NAME}-dev
+      application: ${APP_NAME}
+      release: ${RELEASE_NAME}
+      environment: dev
     name: ${APP_NAME}-dc
   spec:
     replicas: 2
     selector:
-      environment: ${APP_NAME}-dev
+      application: ${APP_NAME}
+      release: ${RELEASE_NAME}
+      environment: dev
     template:
       metadata:
         labels:
-          environment: ${APP_NAME}-dev
+          application: ${APP_NAME}
+          release: ${RELEASE_NAME}
+          environment: dev
       spec:
         containers:
           - image: ${APP_NAME}:${RELEASE_NAME}-dev
@@ -140,8 +147,9 @@ objects:
   kind: Service
   metadata:
     labels:
-      app: ${APP_NAME}
-      environment: ${APP_NAME}-dev
+      application: ${APP_NAME}
+      release: ${RELEASE_NAME}
+      environment: dev
     name: ${APP_NAME}-svc
   spec:
     ports:
@@ -149,7 +157,9 @@ objects:
         protocol: TCP
         targetPort: ${{CONTAINER_PORT}}
     selector:
-      environment: ${APP_NAME}-dev
+      application: ${APP_NAME}
+      release: ${RELEASE_NAME}
+      environment: dev
     sessionAffinity: None
     type: ClusterIP
 
@@ -157,8 +167,9 @@ objects:
   kind: Route
   metadata:
     labels:
-      app: ${APP_NAME}
-      environment: ${APP_NAME}-dev
+      application: ${APP_NAME}
+      release: ${RELEASE_NAME}
+      environment: dev
     name: ${APP_NAME}-route
   spec:
     to:

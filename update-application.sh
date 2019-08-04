@@ -4,7 +4,7 @@ oc login -u developer -p developer
 # create new project for 'helloworld' application release 'v1' 
 oc new-project helloworld-dev
 
-# Run Jenkins pod inside the project
+# Run Jenkins pod inside the project. It is used to run pipeline which builds application.
 oc new-app jenkins-ephemeral
 
 
