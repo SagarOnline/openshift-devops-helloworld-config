@@ -23,4 +23,4 @@ else
     oc new-app jenkins-ephemeral
 fi
 
-oc process -f dev/pipelines/rollout/application-template.yaml --param-file application.properties --ignore-unknown-parameters=true | oc apply -f -
+oc process -f dev/pipelines/rollout/application-template.yaml --param-file application.properties --ignore-unknown-parameters=true | oc replace -f -
