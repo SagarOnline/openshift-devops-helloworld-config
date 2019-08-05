@@ -72,6 +72,7 @@ pipeline {
 
                     sh "sed -i 's/namespace:.*//g' state.yaml" // remove old namespace references
                     sh "sed -i 's/clusterIP:.*//g' state.yaml" // remove old clusterIP reference
+                    sh "sed -i 's/host:.*//g' state.yaml" // remove old clusterIP reference
                     
                     //Copy  exported objects to IT environment
                     sh "oc project $itProjectName"
