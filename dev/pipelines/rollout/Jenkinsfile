@@ -26,10 +26,10 @@ pipeline {
                     sh "oc get project > projects.txt"
                     if (!readFile("projects.txt").contains(projectName)){
                         //Create Project for Application in Dev environment
-                        sh "oc new-project $props.APP_NAME-$props.RELEASE_NAME-dev"
+                        sh "oc new-project $projectName"
                     }else {
                         //switch to existing project
-                        sh "oc project $props.APP_NAME-$props.RELEASE_NAME-dev"
+                        sh "oc project $projectName"
                     }
 
                     sh "oc get dc > deployments.txt"
@@ -41,7 +41,6 @@ pipeline {
                     // Apply Resource object configuration changes
                     
                     sh 'oc process -f dev/pipelines/rollout/application-template.yaml --param-file application.properties --ignore-unknown-parameters=true | oc apply -f -'
-                    error("Failed to match condition")
                 }
             }
         }

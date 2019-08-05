@@ -24,10 +24,16 @@ pipeline {
                     def devProjectName = "$props.APP_NAME-$props.RELEASE_NAME-dev"
                     echo "Promoting  application '$devProjectName' in DEV environment to IT"
                     sh "oc get project > projects.txt"
-                    if (!readFile("projects.txt").contains(projectName)){
+                    if (!readFile("projects.txt").contains(devProjectName)){
+                        error("Project : " + devProjectName +" is not avialable in DEV environment. Nothing to promote !")
                         //Create Project for Application in Dev environment
-                        sh "oc new-project $props.APP_NAME-$props.RELEASE_NAME-dev"
+                        //sh "oc new-project $props.APP_NAME-$props.RELEASE_NAME-dev"
                     }else {
+                        def itProjectName = "$props.APP_NAME-$props.RELEASE_NAME-it"
+                        if (!readFile("projects.txt").contains(itProjectName)){
+                        }else{
+
+                        }
                         //switch to existing project
                         sh "oc project $props.APP_NAME-$props.RELEASE_NAME-dev"
                     }
