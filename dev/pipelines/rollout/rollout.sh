@@ -7,9 +7,9 @@ oc get project > projects.txt
 projects=$(<projects.txt)
 
 if [[ $projects == *$devProjectName* ]]; then
-  oc project devProjectName
+  oc project $devProjectName
 else
-    oc new-project devProjectName
+    oc new-project $devProjectName
 fi
 
 # create new project for 'helloworld' application release 'v1' 
