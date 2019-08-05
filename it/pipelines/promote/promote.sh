@@ -18,16 +18,16 @@ oc project $devProjectName
 
 oc get dc,svc,route,is -o=yaml  --export -l app=helloworld,release=v1,environment=dev >state.yaml
 
-sed -i 's/namespace:.*//g' state.yaml 
-sed -i 's/clusterIP:.*//g' state.yaml
-sed -i 's/host:.*//g' state.yaml
+#sed -i 's/namespace:.*//g' state.yaml 
+#sed -i 's/clusterIP:.*//g' state.yaml
+#sed -i 's/host:.*//g' state.yaml
                     
                    
-sed -i 's/annotations:*//g' state.yaml
-sed -i 's/.*last-applied-configuration.*//g' state.yaml
-sed -i 's/.*{\".*}//g' state.yaml
+#sed -i 's/annotations:*//g' state.yaml
+#sed -i 's/.*last-applied-configuration.*//g' state.yaml
+#sed -i 's/.*{\".*}//g' state.yaml
 #sed -i 's/.*host.generated.*//g' state.yaml
                     
 oc project $itProjectName
 
-oc apply -f state.yaml
+oc replace -f state.yaml
