@@ -3,7 +3,7 @@ pipeline {
 
     stages {
 
-        stage('Promote') {
+        stage('Create Project') {
             agent{
                 docker{
                     image 'openshift/origin-cli'
@@ -24,29 +24,90 @@ pipeline {
                     def devProjectName = "$props.APP_NAME-$props.RELEASE_NAME-dev"
                     echo "Promoting  application '$devProjectName' in DEV environment to IT"
                     sh "oc get project > projects.txt"
+
+                    // check if project is already available in DEV environment
                     if (!readFile("projects.txt").contains(devProjectName)){
-                        error("Project : " + devProjectName +" is not avialable in DEV environment. Nothing to promote !")
+                        
+                        error("Project : '$devProjectName' is not avialable in DEV environment. Nothing to promote !")
                         //Create Project for Application in Dev environment
                         //sh "oc new-project $props.APP_NAME-$props.RELEASE_NAME-dev"
                     }else {
+                        // create project in IT environment if it does not exists
                         def itProjectName = "$props.APP_NAME-$props.RELEASE_NAME-it"
                         if (!readFile("projects.txt").contains(itProjectName)){
+                            sh "oc new-project $itProjectName"
                         }else{
-
+                            //switch to existing project
+                            echo "Project '$itProjectName' is already available in IT environment"
                         }
-                        //switch to existing project
-                        sh "oc project $props.APP_NAME-$props.RELEASE_NAME-dev"
+                        
                     }
+                }
+            }
+        }
+    }
 
-                    sh "oc get dc > deployments.txt"
-                    if (!readFile("deployments.txt").contains("jenkins")){
-                        // Run Jenkins pod to run OpenShift pipelines
-                        sh 'oc new-app jenkins-ephemeral'
-                    }
+    stages {
+        stage('Promote Build') {
+            agent{
+                docker{
+                    image 'openshift/origin-cli'
+                    label 'docker-agent'
+                }
+            }
+            steps {
+                script{
+
+                    def props = readProperties  file: 'application.properties'
+                    
+                    // Login to OpenShift Cluster
+                    //TODO : Credentials are currently hardcoded for Demo, these should be parameterized
+                    sh "oc login $props.OPENSHIFT_CLUSTER_URL -u developer -p developer  --insecure-skip-tls-verify"
+
+                    def itProjectName = "$props.APP_NAME-$props.RELEASE_NAME-it"
+
+                    def devImageStreamTag = "$props.APP_NAME:$props.RELEASE_NAME-dev"
+                    def itImageStreamTag = "$props.APP_NAME:$props.RELEASE_NAME-it"
+                    //switch to project in IT environment
+                    sh "oc project $itProjectName"
+
+                    sh "oc tag $devImageStreamTag $itImageStreamTag"
+
+                }
+            }
+        }
+    }
+
+    stages {
+        stage('Promote Deployment') {
+            agent{
+                docker{
+                    image 'openshift/origin-cli'
+                    label 'docker-agent'
+                }
+            }
+            steps {
+                script{
+
+                    def props = readProperties  file: 'application.properties'
+                    
+                    // Login to OpenShift Cluster
+                    //TODO : Credentials are currently hardcoded for Demo, these should be parameterized
+                    sh "oc login $props.OPENSHIFT_CLUSTER_URL -u developer -p developer  --insecure-skip-tls-verify"
+
+                    def itProjectName = "$props.APP_NAME-$props.RELEASE_NAME-it"
+
+                    def devImageStreamTag = "$props.APP_NAME:$props.RELEASE_NAME-dev"
+                    def itImageStreamTag = "$props.APP_NAME:$props.RELEASE_NAME-it"
+                    //switch to project in IT environment
+                    sh "oc project $itProjectName"
+
+                    sh "oc tag $devImageStreamTag $itImageStreamTag"
+
 
                     // Apply Resource object configuration changes
                     
-                    sh 'oc process -f dev/pipelines/rollout/application-template.yaml --param-file application.properties --ignore-unknown-parameters=true | oc apply -f -'
+                    //sh 'oc process -f dev/pipelines/rollout/application-template.yaml --param-file application.properties --ignore-unknown-parameters=true | oc apply -f -'
                 }
             }
         }
