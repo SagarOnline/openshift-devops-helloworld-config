@@ -15,6 +15,7 @@ fi
 
 # create new project for 'helloworld' application release 'v1' 
 #oc new-project helloworld-v1-dev
+oc get dc > deployments.txt
 deployments=$(<deployments.txt)
 if [[ $deployments == *"jenkins"* ]]; then
   echo "jenkins-ephemeral already present"
