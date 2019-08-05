@@ -27,6 +27,9 @@ pipeline {
                     if (!readFile("projects.txt").contains(projectName)){
                         //Create Project for Application in Dev environment
                         sh "oc new-project $props.APP_NAME-$props.RELEASE_NAME-dev"
+                    }else {
+                        //switch to existing project
+                        sh "oc project $props.APP_NAME-$props.RELEASE_NAME-dev"
                     }
 
                     sh "oc get dc > deployments.txt"
