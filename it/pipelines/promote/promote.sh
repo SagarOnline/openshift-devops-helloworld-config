@@ -13,4 +13,5 @@ oc get dc,svc,route,is -o=yaml  --export -l app=helloworld,release=v1,environmen
 
 sed -i 's/namespace:.*//g' state.yaml
 sed -i 's/clusterIP:.*//g' state.yaml
+sed -i 's/host:.*//g' state.yaml
 oc apply -f state.yaml
