@@ -16,7 +16,7 @@ fi
 # create new project for 'helloworld' application release 'v1' 
 #oc new-project helloworld-v1-dev
 
-if [[ $projects == *"jenkins-ephemeral"* ]]; then
+if [[ $projects == *"jenkins"* ]]; then
   echo "jenkins-ephemeral already present"
 else
     oc new-app jenkins-ephemeral
