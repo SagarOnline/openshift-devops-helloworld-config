@@ -2,7 +2,7 @@
 
 oc login -u developer -p developer
 
-devProjectName = "helloworld-v1-dev"
+devProjectName="helloworld-v1-dev"
 
 oc get project > projects.txt
 projects=$(<projects.txt)
