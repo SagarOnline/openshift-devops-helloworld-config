@@ -45,9 +45,7 @@ pipeline {
                 }
             }
         }
-    }
 
-    stages {
         stage('Promote Deployment') {
             agent{
                 docker{
@@ -84,9 +82,7 @@ pipeline {
                 }
             }
         }
-    }
 
-    stages {
         stage('Promote Tag') {
             agent{
                 docker{
@@ -117,5 +113,4 @@ pipeline {
             }
         }
     }
-    
 }
