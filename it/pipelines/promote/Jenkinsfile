@@ -81,7 +81,7 @@ pipeline {
                     //Copy  exported objects to IT environment
                     sh "oc project $itProjectName"
 
-                    sh "cat state.yml"
+                    sh "cat state.yaml"
                     // Apply Resource object configuration changes
                     
                     sh 'oc apply -f state.yaml'
