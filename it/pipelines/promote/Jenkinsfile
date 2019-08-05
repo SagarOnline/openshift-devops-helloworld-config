@@ -3,7 +3,7 @@ pipeline {
 
     stages {
 
-        stage('Update Application Resources') {
+        stage('Promote') {
             agent{
                 docker{
                     image 'openshift/origin-cli'
@@ -21,8 +21,8 @@ pipeline {
                     //TODO : Credentials are currently hardcoded for Demo, these should be parameterized
                     sh "oc login $props.OPENSHIFT_CLUSTER_URL -u developer -p developer  --insecure-skip-tls-verify"
 
-                    def projectName = "$props.APP_NAME-$props.RELEASE_NAME-dev"
-                    echo "Setting up release management pipelines for $projectName "
+                    def devProjectName = "$props.APP_NAME-$props.RELEASE_NAME-dev"
+                    echo "Promoting  application '$devProjectName' in DEV environment to IT"
                     sh "oc get project > projects.txt"
                     if (!readFile("projects.txt").contains(projectName)){
                         //Create Project for Application in Dev environment
@@ -41,7 +41,6 @@ pipeline {
                     // Apply Resource object configuration changes
                     
                     sh 'oc process -f dev/pipelines/rollout/application-template.yaml --param-file application.properties --ignore-unknown-parameters=true | oc apply -f -'
-                    error("Failed to match condition")
                 }
             }
         }
