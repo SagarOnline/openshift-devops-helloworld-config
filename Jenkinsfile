@@ -24,7 +24,7 @@ pipeline {
                     def projectName = "$props.APP_NAME-$props.RELEASE_NAME-dev"
                     echo "Setting up release management pipelines for $projectName "
                     sh "oc get project > projects.txt"
-                    if (!readFile("projects.txt").contains($projectName)){
+                    if (!readFile("projects.txt").contains(projectName)){
                         //Create Project for Application in Dev environment
                         sh "oc new-project $props.APP_NAME-$props.RELEASE_NAME-dev"
                     }
