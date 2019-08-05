@@ -113,7 +113,7 @@ objects:
       app: ${APP_NAME}
       release: ${RELEASE_NAME}
       environment: dev
-      test: hello
+      test: hello-label
     name: ${APP_NAME}-dc
   spec:
     replicas: 2
