@@ -1,3 +1,4 @@
+#!/bin/bash
 #login to openshift cluster
 oc login -u developer -p developer
 
