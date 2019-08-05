@@ -158,7 +158,7 @@ objects:
         protocol: TCP
         targetPort: ${{CONTAINER_PORT}}
     selector:
-      application: ${APP_NAME}
+      app: ${APP_NAME}
       release: ${RELEASE_NAME}
       environment: dev
     sessionAffinity: None
