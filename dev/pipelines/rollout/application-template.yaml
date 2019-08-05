@@ -110,20 +110,20 @@ objects:
   kind: DeploymentConfig
   metadata:
     labels:
-      application: ${APP_NAME}
+      app: ${APP_NAME}
       release: ${RELEASE_NAME}
       environment: dev
     name: ${APP_NAME}-dc
   spec:
     replicas: 2
     selector:
-      application: ${APP_NAME}
+      app: ${APP_NAME}
       release: ${RELEASE_NAME}
       environment: dev
     template:
       metadata:
         labels:
-          application: ${APP_NAME}
+          app: ${APP_NAME}
           release: ${RELEASE_NAME}
           environment: dev
       spec:
@@ -148,7 +148,7 @@ objects:
   kind: Service
   metadata:
     labels:
-      application: ${APP_NAME}
+      app: ${APP_NAME}
       release: ${RELEASE_NAME}
       environment: dev
     name: ${APP_NAME}-svc
@@ -168,7 +168,7 @@ objects:
   kind: Route
   metadata:
     labels:
-      application: ${APP_NAME}
+      app: ${APP_NAME}
       release: ${RELEASE_NAME}
       environment: dev
     name: ${APP_NAME}-route
@@ -184,4 +184,6 @@ objects:
   metadata:
     labels:
       app: ${APP_NAME}
+      release: ${RELEASE_NAME}
+      environment: dev
     name: ${APP_NAME}
