@@ -78,7 +78,7 @@ pipeline {
                     sh "sed -i 's/annotations:*//g' state.yaml"
                     sh "sed -i 's/.*last-applied-configuration.*//g' state.yaml"
                     sh "sed -i 's/.*{\".*}//g' state.yaml"
-                    sh "sed -i 's/.*host\.generated.*//g' state.yaml"
+                    sh "sed -i 's/.*host.generated.*//g' state.yaml"
                     
                     //Copy  exported objects to IT environment
                     sh "oc project $itProjectName"
