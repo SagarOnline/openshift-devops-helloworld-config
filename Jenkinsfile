@@ -21,7 +21,7 @@ pipeline {
                     //TODO : Credentials are currently hardcoded for Demo, these should be parameterized
                     sh "oc login $props.OPENSHIFT_CLUSTER_URL -u developer -p developer  --insecure-skip-tls-verify"
 
-                    def projectName = $props.APP_NAME-${RELEASE_NAME}-dev
+                    def projectName = "$props.APP_NAME-${RELEASE_NAME}-dev"
                     echo "Setting up release management pipelines for $projectName "
                     sh "oc get project > projects.txt"
                     if (!readFile("projects.txt").contains($projectName)){
