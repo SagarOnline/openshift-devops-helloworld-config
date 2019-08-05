@@ -36,6 +36,7 @@ parameters:
 - description: Path of Jenkinsfile to build application code. It should be relative to the context directory specified by 'APP_CONFIG_GIT_REPO' param.
   displayName: Path of Jenkinsfile to build application code
   name: BUILD_JENKINSFILE_PATH
+  value: dev/pipelines/build/Jenkinsfile
   required: true
 - description: Name of secret to be used by build pipeline (BuildConfig Trigger) for Github webhook.
   displayName: Secret name used by build pipeline Github trigger

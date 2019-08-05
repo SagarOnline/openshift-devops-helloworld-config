@@ -38,9 +38,9 @@ pipeline {
                         sh 'oc new-app jenkins-ephemeral'
                     }
 
-                    // Setup Application Dev Environment
+                    // Apply Resource object configuration changes
                     
-                    sh 'oc process -f dev/application-template.yaml --param-file application.properties --ignore-unknown-parameters=true | oc apply -f -'
+                    sh 'oc process -f dev/pipelines/rollout/application-template.yaml --param-file application.properties --ignore-unknown-parameters=true | oc apply -f -'
                 }
             }
         }
