@@ -57,7 +57,6 @@ objects:
     labels:
       app: ${APP_NAME}
       release: ${RELEASE_NAME}
-      environment: dev
     name: ${APP_NAME}-build
   spec:
     source:
@@ -89,7 +88,6 @@ objects:
     labels:
       app: ${APP_NAME}
       release: ${RELEASE_NAME}
-      environment: dev
   spec:
     runPolicy: "Serial"
     source:
@@ -112,7 +110,6 @@ objects:
     labels:
       app: ${APP_NAME}
       release: ${RELEASE_NAME}
-      environment: dev
       test: hello-label
     name: ${APP_NAME}-dc
   spec:
@@ -120,13 +117,11 @@ objects:
     selector:
       app: ${APP_NAME}
       release: ${RELEASE_NAME}
-      environment: dev
     template:
       metadata:
         labels:
           app: ${APP_NAME}
           release: ${RELEASE_NAME}
-          environment: dev
       spec:
         containers:
           - image: ${APP_NAME}:${RELEASE_NAME}
@@ -151,7 +146,6 @@ objects:
     labels:
       app: ${APP_NAME}
       release: ${RELEASE_NAME}
-      environment: dev
     name: ${APP_NAME}-svc
   spec:
     ports:
@@ -161,7 +155,6 @@ objects:
     selector:
       app: ${APP_NAME}
       release: ${RELEASE_NAME}
-      environment: dev
     sessionAffinity: None
     type: ClusterIP
 
@@ -171,7 +164,6 @@ objects:
     labels:
       app: ${APP_NAME}
       release: ${RELEASE_NAME}
-      environment: dev
     name: ${APP_NAME}-route
   spec:
     to:
@@ -186,5 +178,4 @@ objects:
     labels:
       app: ${APP_NAME}
       release: ${RELEASE_NAME}
-      environment: dev
     name: ${APP_NAME}
