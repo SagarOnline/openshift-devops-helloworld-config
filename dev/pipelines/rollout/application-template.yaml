@@ -127,7 +127,7 @@ objects:
           - image: ${APP_NAME}:${RELEASE_NAME}
             imagePullPolicy: IfNotPresent
             resources: {}
-            name: ${APP_NAME}
+            name: ${APP_NAME}-test
         restartPolicy: Always
         terminationGracePeriodSeconds: 30
     triggers:
@@ -135,7 +135,7 @@ objects:
       - imageChangeParams:
           automatic: true
           containerNames:
-            - ${APP_NAME}
+            - ${APP_NAME}-test
           from:
             kind: ImageStreamTag
             name: '${APP_NAME}:${RELEASE_NAME}'
