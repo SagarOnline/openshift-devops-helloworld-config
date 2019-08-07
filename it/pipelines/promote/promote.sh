@@ -30,4 +30,4 @@ sed -i 's/.*host.generated.*//g' state.yaml
                     
 oc project $itProjectName
 
-oc replace -f state.yaml
+oc apply -f state.yaml

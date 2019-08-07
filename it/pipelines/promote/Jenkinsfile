@@ -68,7 +68,7 @@ pipeline {
                     //Export objects from DEV environment
                     sh "oc project $devProjectName"
 
-                    sh "oc get dc,svc,route,is -o=yaml  --export -l app=$props.APP_NAME,release=$props.RELEASE_NAME,environment=dev >state.yaml"
+                    sh "oc get dc,svc,route,is -o=yaml  --export -l app=$props.APP_NAME,release=$props.RELEASE_NAME >state.yaml"
 
                     sh "sed -i 's/namespace:.*//g' state.yaml" // remove old namespace references
                     sh "sed -i 's/clusterIP:.*//g' state.yaml" // remove old clusterIP reference
