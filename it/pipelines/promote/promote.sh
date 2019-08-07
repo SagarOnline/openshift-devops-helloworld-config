@@ -16,7 +16,7 @@ fi
 
 oc project $devProjectName
 
-oc get dc,svc,route,is -o=yaml  --export -l app=helloworld,release=v1,environment=dev >state.yaml
+oc get dc,svc,route,is -o=yaml  --export -l app=helloworld,release=v1 >state.yaml
 
 sed -i 's/namespace:.*//g' state.yaml 
 sed -i 's/clusterIP:.*//g' state.yaml
